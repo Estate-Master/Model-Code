@@ -181,3 +181,16 @@ MAPE = mean_absolute_percentage_error(test_y, y_pred)
 MAPE
 MSE = mean_squared_error(test_y, y_pred)
 MSE
+
+#demo of model
+def predict_prices(town, rooms):
+  restaurant = ameneties_df.loc[ameneties_df['Town'] == town, 'restaurant']
+  primary_school = ameneties_df.loc[ameneties_df['Town'] == town, 'primary_school']
+  shopping_mall = ameneties_df.loc[ameneties_df['Town'] == town, 'shopping_mall']
+  bus_station = ameneties_df.loc[ameneties_df['Town'] == town, 'bus_station']
+  subway_station = ameneties_df.loc[ameneties_df['Town'] == town, 'subway_station']
+  mean_lease_left = age_df.loc[age_df['town'] == town, 'mean_lease_left']
+
+  return 12.3163 * float(restaurant) + 45.6489 * float(primary_school) + -19.8443 * float(shopping_mall) + -2.9791 * float(bus_station) + 14.9765 * float(subway_station) + 31.2560 * float(mean_lease_left) + 267.3964 * float(rooms)
+
+print(predict_prices('ang mo kio', 4))
