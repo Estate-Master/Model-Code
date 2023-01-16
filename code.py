@@ -106,8 +106,8 @@ for town in location_df["Town"]:
   location_df.loc[location_df['Town'] == town, "subway_station"] = get_amenities(cords, "subway_station")
 
 
-ameneties_df = pd.read_csv("/content/ameneties.csv")
-
+  
+#pre-processing of data
 ameneties_df = pd.read_csv("ameneties.csv")
 age_df = pd.read_csv("age_data.csv")
 rental_df = pd.read_csv("rental2byyear.csv")
@@ -122,6 +122,7 @@ merge_1 = ameneties_df.merge(age_df, how = "inner", left_on = "Town", right_on =
 merge_2 = merge_1.merge(rental_df, left_on = "Town", right_on = "town", how = "inner")
 merge_3 = merge_2.merge(location_df, on = "Town", how = "inner")
 
+#converts 1-rm to 1
 def change(x): 
   first = x[0]
   if (first == "1"):
@@ -139,8 +140,8 @@ def change(x):
 
 merge_3["flat_type"] = merge_3["flat_type"].apply(lambda x: change(x))
 
+#training of linear regression model
 train, test = train_test_split(merge_3, test_size = 0.3)
-
 train_y = train["monthly_rent"]
 test_y = test["monthly_rent"]
 train_x = train[["restaurant", "primary_school", "shopping_mall", "bus_station", "subway_station", 
@@ -160,8 +161,6 @@ linear_model.coef_
 y_pred = linear_model.predict(test_x)
 
 #Using OLS regression
-
-
 regr = linear_model.LinearRegression()
 regr.fit(train_x, train_y)
 
@@ -175,14 +174,10 @@ predictions = model.predict(test_x)
 print_model = model.summary()
 print(print_model)
 
+#finding error values
 MAE = mean_absolute_error(test_y, y_pred)
-
 MAE
-
 MAPE = mean_absolute_percentage_error(test_y, y_pred)
-
 MAPE
-
 MSE = mean_squared_error(test_y, y_pred)
-
 MSE
